@@ -61,7 +61,34 @@ public class AuthenticationService : IAuthenticationService {
         UserModel user = new UserModel {
             id = id,
             username = username,
-            password = EncryptPassword(id.ToString(), pwd)
+            password = EncryptPassword(id.ToString(), pwd),
+            loginStatus = false,
+            autherizationToken = null,
+            tasks = new[] {
+                new TaskModel {
+                    title = "Create some more tasks!",
+                    description = "- To create more task press the Plus button! \n\n- To edit this task press edit " +
+                                  "down below! \n\n- To delete this task press the delete button down below! \n\n- " +
+                                  "Hurry! Your task ends in 2 minutes",
+                    endDate = DateTime.Now,
+                    id = 0,
+                    startDate = DateTime.Now.Add(new TimeSpan(0, 0, 2, 0))
+                },
+                new TaskModel {
+                    title = "Delayed Task!",
+                    description = "This task will start in a minute!",
+                    endDate = DateTime.Now.Add(new TimeSpan(0, 0, 3, 0)),
+                    id = 0,
+                    startDate = DateTime.Now.Add(new TimeSpan(0, 0, 1, 0))
+                },
+                new TaskModel {
+                    title = "Finished Task!",
+                    description = "This task finished a while ago!",
+                    endDate = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)),
+                    id = 0,
+                    startDate = DateTime.Now.Add(new TimeSpan(0, 10, 0, 0))
+                }
+            }
         };
 
         await users.InsertUser(user);
