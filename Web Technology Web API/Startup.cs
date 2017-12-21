@@ -1,40 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using System;
 
-namespace Web_Technology_Web_API
-{
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
+public class Startup {
+    public IConfiguration configuration { get; }
+
+    public Startup(IConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public void ConfigureServices(IServiceCollection services) {
+        Console.WriteLine("ConfigureServices");
+        services.AddCors();
+        services.AddMvc();
+
+        services.AddSingleton<IMongoDbService, MongoDbService>(mdbs => new MongoDbService(new MongoClientSettings {
+            Server = new MongoServerAddress("localhost", 27017),
+            ServerSelectionTimeout = TimeSpan.FromSeconds(3)
+        }, "webTechDB"));
+        services.AddSingleton<IAuthenticationService, AuthenticationService>();
+    }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        Console.WriteLine("Configure");
+        if (env.IsDevelopment()) {
+            app.UseDeveloperExceptionPage();
+        } else {
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
         }
 
-        public IConfiguration Configuration { get; }
+        // allow cross origin requests
+        app.UseCors(
+            options => options.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyHeader()
+        );
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseMvc();
-        }
+        app.UseMvc();
     }
 }
