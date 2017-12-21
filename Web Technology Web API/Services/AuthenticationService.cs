@@ -70,9 +70,9 @@ public class AuthenticationService : IAuthenticationService {
                     description = "- To create more task press the Plus button! \n\n- To edit this task press edit " +
                                   "down below! \n\n- To delete this task press the delete button down below! \n\n- " +
                                   "Hurry! Your task ends in 2 minutes",
-                    endDate = DateTime.Now,
+                    endDate = DateTime.Now.Add(new TimeSpan(0, 0, 2, 0)),
                     id = 0,
-                    startDate = DateTime.Now.Add(new TimeSpan(0, 0, 2, 0))
+                    startDate = DateTime.Now
                 },
                 new TaskModel {
                     title = "Delayed Task!",
@@ -84,9 +84,9 @@ public class AuthenticationService : IAuthenticationService {
                 new TaskModel {
                     title = "Finished Task!",
                     description = "This task finished a while ago!",
-                    endDate = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)),
+                    endDate = DateTime.Now.Subtract(new TimeSpan(0, 10, 0, 0)),
                     id = 0,
-                    startDate = DateTime.Now.Add(new TimeSpan(0, 10, 0, 0))
+                    startDate = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0))
                 }
             }
         };
