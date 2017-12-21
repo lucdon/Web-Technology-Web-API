@@ -25,7 +25,7 @@ public class TasksAPIController : Controller {
         }
 
         UserModel model = await database.GetUserCollection().GetUserInfo(id);
-        return Json(new object[] {model.tasks});
+        return Json(model.tasks);
     }
 
     /// <summary>

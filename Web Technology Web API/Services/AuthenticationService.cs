@@ -78,14 +78,14 @@ public class AuthenticationService : IAuthenticationService {
                     title = "Delayed Task!",
                     description = "This task will start in a minute!",
                     endDate = DateTime.Now.Add(new TimeSpan(0, 0, 3, 0)),
-                    id = 0,
+                    id = 1,
                     startDate = DateTime.Now.Add(new TimeSpan(0, 0, 1, 0))
                 },
                 new TaskModel {
                     title = "Finished Task!",
                     description = "This task finished a while ago!",
                     endDate = DateTime.Now.Subtract(new TimeSpan(0, 10, 0, 0)),
-                    id = 0,
+                    id = 2,
                     startDate = DateTime.Now.Add(new TimeSpan(1, 0, 0, 0))
                 }
             }
